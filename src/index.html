@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' object-src 'self' blob:; frame-src 'self' blob:; " /> -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
@@ -26,16 +25,19 @@
   </body>
 
   <script>
+    // base 64 code for an empty signature
     let PDF_LIB_SIGNATURE = 'iVBORw0KGgoAAAANSUhEUgAAARQAAAC0CAYAAABVG9MjAAAAAXNSR0IArs4c6QAABPZJREFUeF7t1LENADAMw7D2/6NdoDdoZA7wQAS623YcAQIEAoErKIGiCQIEvoCgeAQCBDIBQckoDREgICh+gACBTEBQMkpDBAgIih8gQCATEJSM0hABAoLiBwgQyAQEJaM0RICAoPgBAgQyAUHJKA0RICAofoAAgUxAUDJKQwQICIofIEAgExCUjNIQAQKC4gcIEMgEBCWjNESAgKD4AQIEMgFBySgNESAgKH6AAIFMQFAySkMECAiKHyBAIBMQlIzSEAECguIHCBDIBAQlozREgICg+AECBDIBQckoDREgICh+gACBTEBQMkpDBAgIih8gQCATEJSM0hABAoLiBwgQyAQEJaM0RICAoPgBAgQyAUHJKA0RICAofoAAgUxAUDJKQwQICIofIEAgExCUjNIQAQKC4gcIEMgEBCWjNESAgKD4AQIEMgFBySgNESAgKH6AAIFMQFAySkMECAiKHyBAIBMQlIzSEAECguIHCBDIBAQlozREgICg+AECBDIBQckoDREgICh+gACBTEBQMkpDBAgIih8gQCATEJSM0hABAoLiBwgQyAQEJaM0RICAoPgBAgQyAUHJKA0RICAofoAAgUxAUDJKQwQICIofIEAgExCUjNIQAQKC4gcIEMgEBCWjNESAgKD4AQIEMgFBySgNESAgKH6AAIFMQFAySkMECAiKHyBAIBMQlIzSEAECguIHCBDIBAQlozREgICg+AECBDIBQckoDREgICh+gACBTEBQMkpDBAgIih8gQCATEJSM0hABAoLiBwgQyAQEJaM0RICAoPgBAgQyAUHJKA0RICAofoAAgUxAUDJKQwQICIofIEAgExCUjNIQAQKC4gcIEMgEBCWjNESAgKD4AQIEMgFBySgNESAgKH6AAIFMQFAySkMECAiKHyBAIBMQlIzSEAECguIHCBDIBAQlozREgICg+AECBDIBQckoDREgICh+gACBTEBQMkpDBAgIih8gQCATEJSM0hABAoLiBwgQyAQEJaM0RICAoPgBAgQyAUHJKA0RICAofoAAgUxAUDJKQwQICIofIEAgExCUjNIQAQKC4gcIEMgEBCWjNESAgKD4AQIEMgFBySgNESAgKH6AAIFMQFAySkMECAiKHyBAIBMQlIzSEAECguIHCBDIBAQlozREgICg+AECBDIBQckoDREgICh+gACBTEBQMkpDBAgIih8gQCATEJSM0hABAoLiBwgQyAQEJaM0RICAoPgBAgQyAUHJKA0RICAofoAAgUxAUDJKQwQICIofIEAgExCUjNIQAQKC4gcIEMgEBCWjNESAgKD4AQIEMgFBySgNESAgKH6AAIFMQFAySkMECAiKHyBAIBMQlIzSEAECguIHCBDIBAQlozREgICg+AECBDIBQckoDREgICh+gACBTEBQMkpDBAgIih8gQCATEJSM0hABAoLiBwgQyAQEJaM0RICAoPgBAgQyAUHJKA0RICAofoAAgUxAUDJKQwQICIofIEAgExCUjNIQAQKC4gcIEMgEBCWjNESAgKD4AQIEMgFBySgNESAgKH6AAIFMQFAySkMECAiKHyBAIBMQlIzSEAECguIHCBDIBAQlozREgICg+AECBDIBQckoDREgICh+gACBTEBQMkpDBAgIih8gQCATEJSM0hABAoLiBwgQyAQEJaM0RICAoPgBAgQyAUHJKA0RIPAARFnOAwdMoEkAAAAASUVORK5CYII=';
 
+    // this outputs the pdf to the screen
     const renderInIframe = (pdfBytes) => {
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
       const blobUrl = URL.createObjectURL(blob);
       document.getElementById('iframe').src = blobUrl;
     };
 
-    test();
-    async function test() {
+    // outputs the pdf to the screen and fills the form with the img (in this case the base64 signature)
+    pdfSignature();
+    async function pdfSignature() {
       const url = './dist/with_signature.pdf'
       const signaturePdf = await fetch(url).then(res => res.arrayBuffer())
 
@@ -102,6 +104,7 @@
       renderInIframe(pdfBytes);
     }
 
+    // start recording the signature on the canvas
     function signatureCapture() {
       var canvas = document.getElementById("newSignature");
       let hider = document.getElementById("sign_box");
@@ -120,7 +123,7 @@
       var xyLast = {};
       var xyAddLast = {};
       var calculate = false;
-      {   //functions
+      {
         function remove_event_listeners() {
           canvas.removeEventListener('mousemove', on_mousemove, false);
           canvas.removeEventListener('mouseup', on_mouseup, false);
@@ -213,16 +216,17 @@
       canvas.addEventListener('mousedown', on_mousedown, false);
     }
 
+    // saves the signature and reloads the pdf to show it
     async function signatureSave() {
-      var canvas = document.getElementById("newSignature");// save canvas image as data url (png format by default)
+      var canvas = document.getElementById("newSignature");
       var dataURL = canvas.toDataURL("image/png");
       console.log(dataURL);
       console.log(dataURL.split(',')[1]);
       PDF_LIB_SIGNATURE = dataURL.split(',')[1];
-      test();
-      // document.getElementById("saveSignature").src = dataURL;
+      pdfSignature();
     };
 
+    // removes the current signature from the canvas
     function signatureClear() {
       var canvas = document.getElementById("newSignature");
       var context = canvas.getContext("2d");
